@@ -72,7 +72,7 @@ namespace geom {
         return lerp(quadratic(v0, v1, v2, t), quadratic(v1, v2, v3, t), t);
     }
 
-};
+}
 
 geom::Vec2 from_raylib(Vector2 const& vec) {
     return {static_cast<double>(vec.x), static_cast<double>(vec.y)};
@@ -92,7 +92,7 @@ auto begin_drawing()
 
     BeginDrawing();
     return DrawingGuard();
-};
+}
 
 auto init_raylib(int width, int height, std::string_view const name)
 {
