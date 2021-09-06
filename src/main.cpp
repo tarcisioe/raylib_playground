@@ -4,81 +4,14 @@
 
 #include <raylib.h>
 
-namespace geom {
-    class Vec2 {
-    public:
-        Vec2(double x, double y):
-            x_{x},
-            y_{y}
-        {}
+#include "math/geom/bezier.hpp"
+#include "math/geom/vec2.hpp"
 
-        double x() const { return x_; }
-        double y() const { return y_; }
-
-        Vec2& operator+=(Vec2 const& other)
-        {
-            x_ += other.x_;
-            y_ += other.y_;
-            return *this;
-        }
-
-        Vec2& operator*=(double scalar)
-        {
-            x_ *= scalar;
-            y_ *= scalar;
-            return *this;
-        }
-
-        Vec2& invert()
-        {
-            x_ = -x_;
-            y_ = -y_;
-            return *this;
-        }
-
-    private:
-        double x_, y_;
-    };
-
-    Vec2 operator+(Vec2 lhs, Vec2 const& rhs) {
-        return lhs += rhs;
-    }
-
-    Vec2 operator-(Vec2 vec) {
-        return vec.invert();
-    }
-
-    Vec2 operator-(Vec2 lhs, Vec2 const& rhs) {
-        return lhs += -rhs;
-    }
-
-    Vec2 operator*(Vec2 vec, double scalar) {
-        return vec *= scalar;
-    }
-
-    Vec2 operator*(double lhs, Vec2 rhs) {
-        return rhs * lhs;
-    }
-
-    Vec2 lerp(Vec2 const& v0, Vec2 const& v1, double t) {
-        return v0 + (v1 - v0) * t;
-    }
-
-    Vec2 quadratic(Vec2 const& v0, Vec2 const& v1, Vec2 const& v2, double t) {
-        return lerp(lerp(v0, v1, t), lerp(v1, v2, t), t);
-    }
-
-    Vec2 cubic(Vec2 const& v0, Vec2 const& v1, Vec2 const& v2, Vec2 const& v3, double t) {
-        return lerp(quadratic(v0, v1, v2, t), quadratic(v1, v2, v3, t), t);
-    }
-
-}
-
-geom::Vec2 from_raylib(Vector2 const& vec) {
+math::geom::Vec2 from_raylib(Vector2 const& vec) {
     return {static_cast<double>(vec.x), static_cast<double>(vec.y)};
 }
 
-Vector2 to_raylib(geom::Vec2 const& vec) {
+Vector2 to_raylib(math::geom::Vec2 const& vec) {
     return {static_cast<float>(vec.x()), static_cast<float>(vec.y())};
 }
 
@@ -109,6 +42,8 @@ auto init_raylib(int width, int height, std::string_view const name)
 
 int main()
 try {
+    using math::geom::Vec2;
+
     const auto window_width = 600;
     const auto window_height = 600;
 
@@ -116,10 +51,10 @@ try {
 
     SetTargetFPS(60);
 
-    auto p0 = geom::Vec2(0, 300);
-    auto p1 = geom::Vec2(300, 400);
-    auto p2 = geom::Vec2(300, 400);
-    auto p3 = geom::Vec2(600, 300);
+    auto p0 = Vec2(0, 300);
+    auto p1 = Vec2(300, 400);
+    auto p2 = Vec2(300, 400);
+    auto p3 = Vec2(600, 300);
 
     auto poly = std::vector<Vector2>{};
     poly.reserve(100);
