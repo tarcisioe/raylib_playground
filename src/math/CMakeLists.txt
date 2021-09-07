@@ -13,7 +13,7 @@ target_sources(
 target_include_directories(
     math
         PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}
+            ${CMAKE_SOURCE_DIR}/src
 )
 
 target_link_libraries(
@@ -21,3 +21,5 @@ target_link_libraries(
         PUBLIC
             project_options
 )
+
+add_subdirectory(tests)

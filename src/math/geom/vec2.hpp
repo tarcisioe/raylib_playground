@@ -4,6 +4,8 @@
 namespace math::geom {
     class Vec2 {
     public:
+        Vec2() = default;
+
         Vec2(double x, double y):
             x_{x},
             y_{y}
@@ -33,8 +35,10 @@ namespace math::geom {
             return *this;
         }
 
+        bool operator==(Vec2 const& other) const = default;
+
     private:
-        double x_, y_;
+        double x_{}, y_{};
     };
 
     inline Vec2 operator+(Vec2 lhs, Vec2 const& rhs) {

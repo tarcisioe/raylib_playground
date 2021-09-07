@@ -1,6 +1,7 @@
 add_executable(main)
 
 add_subdirectory(math)
+add_subdirectory(test_common)
 
 target_sources(
     main
