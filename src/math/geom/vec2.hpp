@@ -57,8 +57,8 @@ namespace math::geom {
         return vec *= scalar;
     }
 
-    inline Vec2 operator*(double lhs, Vec2 rhs) {
-        return rhs * lhs;
+    inline Vec2 operator*(double scalar, Vec2 vec) {
+        return vec * scalar;
     }
 
 }
