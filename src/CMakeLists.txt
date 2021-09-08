@@ -1,4 +1,6 @@
+add_subdirectory(canvas)
 add_subdirectory(math)
+add_subdirectory(raylibpp)
 add_subdirectory(test_common)
 
 add_executable(main)
@@ -28,7 +30,7 @@ target_sources(
 target_link_libraries(
     testing_grounds
         PRIVATE
+            canvas
             math
-            project_options
-            CONAN_PKG::raylib
+            raylibpp
 )
