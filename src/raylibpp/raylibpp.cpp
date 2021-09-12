@@ -76,16 +76,15 @@ public:
 
     void draw_circle(Vec2 const& center, double radius)
     {
-        auto x = static_cast<int>(center.x());
-        auto y = static_cast<int>(center.y());
-        auto r = float(radius);
+        auto v = to_raylib(center);
+        auto r = static_cast<float>(radius);
 
         if (impl.fill) {
-            DrawCircle(x, y, r, to_raylib(*impl.fill));
+            DrawCircleSector(v, r, 0, 360, 32, to_raylib(*impl.stroke));
         }
 
         if (impl.stroke) {
-            DrawCircleLines(x, y, r, to_raylib(*impl.stroke));
+            DrawCircleSectorLines(v, r, 0, 360, 32, to_raylib(*impl.stroke));
         }
     }
 
