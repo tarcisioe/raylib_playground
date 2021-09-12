@@ -50,4 +50,5 @@ target_link_libraries(
             canvas
             math
             raylibpp
+            CONAN_PKG::range-v3
 )

@@ -12,6 +12,7 @@ conan(
     PACKAGES
         catch2/2.13.7
         raylib/3.5.0
+        range-v3/0.11.0
 )
 
 add_subdirectory(src)
