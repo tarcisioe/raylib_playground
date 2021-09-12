@@ -1,7 +1,9 @@
-#include <cmath>
 #include <chrono>
-#include <iostream>
+#include <cmath>
 #include <deque>
+#include <iostream>
+#include <numbers>
+#include <vector>
 
 #include "canvas/canvas.hpp"
 #include "math/geom/vec2.hpp"
@@ -20,47 +22,42 @@ struct Polar {
 
 class Epicycle {
 public:
-    Epicycle(Vec2 const& center, double radius, double phase = 0.0):
-        center_{center},
+    Epicycle(double radius, double phase = 0.0, double freq = 1.0):
         radius_{radius},
-        angle_{phase}
+        angle_{phase},
+        freq_{freq}
     {}
-
-    Vec2 const& center() const
-    {
-        return center_;
-    }
 
     double radius() const
     {
         return radius_;
     }
 
-    void rotate(double amount)
+    void rotate(double timestep)
     {
-        angle_ += amount;
+        angle_ += timestep * freq_;
     }
 
-    Vec2 tip() const
+    Vec2 tip(Vec2 const& origin) const
     {
-        return center_ + Polar{radius_, angle_}.to_cartesian();
+        return origin + Polar{radius_, angle_}.to_cartesian();
     }
 
-    void draw(canvas::Canvas& d) const
+    void draw(Vec2 const& origin, canvas::Canvas& d) const
     {
-        auto tip = this->tip();
+        auto tip = this->tip(origin);
 
         d.no_fill();
-        d.draw_circle(center_, radius_);
-        d.draw_line(center_, tip);
+        d.draw_circle(origin, radius_);
+        d.draw_line(origin, tip);
         d.fill(canvas::colors::WHITE);
-        d.draw_circle(tip, 4);
+        // d.draw_circle(tip, 1);
     }
 
 private:
-    Vec2 center_;
     double radius_;
     double angle_;
+    double freq_;
 };
 
 
@@ -69,6 +66,7 @@ try {
     using namespace raylibpp;
     using namespace canvas;
     using math::geom::Vec2;
+    namespace numbers = std::numbers;
 
     constexpr auto window_width = 600;
     constexpr auto window_height = 400;
@@ -77,22 +75,30 @@ try {
     raylib.set_target_fps(60);
 
     auto origin = Vec2{200, 200};
-    auto epicycle = Epicycle{origin, 50.0};
-
     auto wave_ys = std::deque<double>{};
+
+    auto epicycles = std::vector<Epicycle>{};
+
+    for (auto i = 0; i < 10; ++i) {
+        auto n = 2.0*i + 1.0;
+        epicycles.push_back(Epicycle{50.0 * (4.0/(n*numbers::pi)), 0.0, n});
+    }
 
     while (not raylib.should_close()) {
         auto canvas = raylib.canvas();
 
+        auto base_wave_x = origin.x() + 75;
         canvas.clear_background(ColorRGBA{0, 0, 0});
 
-        epicycle.draw(canvas);
+        auto current_origin = origin;
 
-        auto tip = epicycle.tip();
-        auto base_wave_x = origin.x() + 75;
-        wave_ys.push_front(tip.y());
+        for (auto& epicycle: epicycles) {
+            epicycle.draw(current_origin, canvas);
+            current_origin = epicycle.tip(current_origin);
+        }
 
-        canvas.draw_line(tip, {base_wave_x, wave_ys.front()});
+        wave_ys.push_front(current_origin.y());
+        canvas.draw_line(current_origin, {base_wave_x, wave_ys.front()});
 
         auto i = 0;
         for (auto y: wave_ys) {
@@ -104,9 +110,10 @@ try {
             wave_ys.pop_back();
         }
 
-        epicycle.rotate(0.05);
+        for (auto& epicycle: epicycles) {
+            epicycle.rotate(0.05);
+        }
     }
-
 } catch (...) {
     std::clog << "Unknown error. Aborting.";
     return 1;
