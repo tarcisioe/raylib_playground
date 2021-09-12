@@ -64,13 +64,19 @@ try {
 
     while (not raylib.should_close()) {
         auto canvas = raylib.canvas();
+
         canvas.clear_background(ColorRGBA{0, 0, 0});
+
         canvas.no_fill();
         Circle{circle_pos, radius}.draw(canvas);
-        canvas.fill(colors::WHITE);
-        Circle{circle_pos + Polar{radius, time}.to_cartesian(), 4}.draw(canvas);
 
-        time += 0.01;
+        auto small_circle_pos = Polar{radius, time}.to_cartesian() + circle_pos;
+
+        canvas.fill(colors::WHITE);
+        canvas.draw_line(circle_pos, small_circle_pos);
+        Circle{small_circle_pos, 4}.draw(canvas);
+
+        time -= 0.01;
     }
 
 } catch (...) {

@@ -32,7 +32,14 @@ private:
 };
 
 Color to_raylib(canvas::ColorRGBA const& c) {
-    return Color{c.r, c.g, c.b, c.a};
+    return {c.r, c.g, c.b, c.a};
+}
+
+Vector2 to_raylib(math::geom::Vec2 const& v) {
+    return {
+        static_cast<float>(v.x()),
+        static_cast<float>(v.y()),
+    };
 }
 
 }

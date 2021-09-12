@@ -33,8 +33,8 @@ public:
         }
     }
 
-    std::optional<canvas::ColorRGBA> stroke_{canvas::colors::WHITE};
-    std::optional<canvas::ColorRGBA> fill_{};
+    std::optional<canvas::ColorRGBA> stroke{canvas::colors::WHITE};
+    std::optional<canvas::ColorRGBA> fill{};
 
     ::util::MoveMarker moved;
 };
@@ -47,39 +47,46 @@ public:
         impl{raylib_impl}
     {}
 
-    void draw_circle(math::geom::Vec2 const& center, double radius)
+    void stroke(canvas::ColorRGBA const& c)
+    {
+        impl.stroke = c;
+    }
+
+    void fill(canvas::ColorRGBA const& c)
+    {
+        impl.fill = c;
+    }
+
+    void no_stroke()
+    {
+        impl.stroke = std::nullopt;
+    }
+
+    void no_fill()
+    {
+        impl.fill = std::nullopt;
+    }
+
+    void draw_line(Vec2 const& v1, Vec2 const& v2)
+    {
+        if (impl.stroke) {
+            DrawLineV(to_raylib(v1), to_raylib(v2), to_raylib(*impl.stroke));
+        }
+    }
+
+    void draw_circle(Vec2 const& center, double radius)
     {
         auto x = static_cast<int>(center.x());
         auto y = static_cast<int>(center.y());
         auto r = float(radius);
 
-        if (impl.fill_) {
-            DrawCircle(x, y, r, to_raylib(*impl.fill_));
+        if (impl.fill) {
+            DrawCircle(x, y, r, to_raylib(*impl.fill));
         }
 
-        if (impl.stroke_) {
-            DrawCircleLines(x, y, r, to_raylib(*impl.stroke_));
+        if (impl.stroke) {
+            DrawCircleLines(x, y, r, to_raylib(*impl.stroke));
         }
-    }
-
-    void stroke(canvas::ColorRGBA const& c)
-    {
-        impl.stroke_ = c;
-    }
-
-    void fill(canvas::ColorRGBA const& c)
-    {
-        impl.fill_ = c;
-    }
-
-    void no_stroke()
-    {
-        impl.stroke_ = std::nullopt;
-    }
-
-    void no_fill()
-    {
-        impl.fill_ = std::nullopt;
     }
 
     void clear_background(canvas::ColorRGBA const& c)

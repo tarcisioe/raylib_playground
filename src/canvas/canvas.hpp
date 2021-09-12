@@ -35,6 +35,11 @@ public:
         inner->no_stroke();
     }
 
+    void draw_line(math::geom::Vec2 const& v1, math::geom::Vec2 const& v2)
+    {
+        inner->draw_line(v1, v2);
+    }
+
     void draw_circle(math::geom::Vec2 const& center, double radius)
     {
         inner->draw_circle(center, radius);
@@ -52,6 +57,7 @@ private:
         virtual void stroke(canvas::ColorRGBA const& c) = 0;
         virtual void no_fill() = 0;
         virtual void no_stroke() = 0;
+        virtual void draw_line(math::geom::Vec2 const& v1, math::geom::Vec2 const& v2) = 0;
         virtual void draw_circle(math::geom::Vec2 const& center, double radius) = 0;
         virtual void clear_background(canvas::ColorRGBA const& c) = 0;
     };
@@ -80,6 +86,11 @@ private:
         void no_stroke() override
         {
             d_.no_stroke();
+        }
+
+        void draw_line(math::geom::Vec2 const& v1, math::geom::Vec2 const& v2) override
+        {
+            d_.draw_line(v1, v2);
         }
 
         void draw_circle(math::geom::Vec2 const& center, double radius) override
