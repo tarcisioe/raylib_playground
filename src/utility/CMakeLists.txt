@@ -1,25 +1,22 @@
-add_library(canvas)
+
+add_library(utility)
 
 target_sources(
-    canvas
+    utility
         PUBLIC
-            canvas.hpp
-            color.hpp
+            move.hpp
         PRIVATE
-            canvas.cpp
-            color.cpp
+            move.cpp
 )
 
 target_include_directories(
-    canvas
+    utility
         PUBLIC
             ${CMAKE_SOURCE_DIR}/src
 )
 
 target_link_libraries(
-    canvas
+    utility
         PUBLIC
             project_options
 )
-
-# add_subdirectory(tests)

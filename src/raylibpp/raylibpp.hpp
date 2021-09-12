@@ -5,9 +5,16 @@
 
 namespace canvas {
 class Canvas;
+class ColorRGBA;
 }
 
 namespace raylibpp {
+
+namespace impl {
+
+class RaylibImpl;
+
+}
 
 class Raylib {
 public:
@@ -20,9 +27,7 @@ public:
     void set_target_fps(int fps);
 
 private:
-    class RaylibImpl;
-
-    std::unique_ptr<RaylibImpl> impl;
+    std::unique_ptr<impl::RaylibImpl> impl;
 };
 
 }

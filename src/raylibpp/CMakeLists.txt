@@ -5,6 +5,8 @@ target_sources(
         PUBLIC
             raylibpp.hpp
         PRIVATE
+            raylib_utils.hpp
+            raylib_utils.cpp
             raylibpp.cpp
 )
 
@@ -18,6 +20,7 @@ target_link_libraries(
     raylibpp
         PUBLIC
             canvas
+            utility
             project_options
             CONAN_PKG::raylib
 )
