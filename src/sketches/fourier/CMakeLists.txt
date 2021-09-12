@@ -3,6 +3,8 @@ add_executable(fourier)
 target_sources(
     fourier
         PRIVATE
+            epicycles.hpp
+            epicycles.cpp
             fourier.cpp
 )
 
