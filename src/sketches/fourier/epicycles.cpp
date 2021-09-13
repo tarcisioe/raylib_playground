@@ -77,7 +77,7 @@ Epicycles Epicycles::fourier_series(std::size_t n, double base_radius)
     auto epicycles = std::vector<Epicycle>{};
     epicycles.reserve(n);
 
-    for (auto i = 0; i < 10; ++i) {
+    for (auto i = 0u; i < n; ++i) {
         auto n_i = 2.0*i + 1.0;
         auto radius = base_radius * (4.0 / (n_i * pi));
         epicycles.push_back(Epicycle{radius, 0.0, n_i});
