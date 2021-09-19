@@ -19,7 +19,7 @@ class Epicycle;
 
 class Epicycles {
 public:
-    static Epicycles fourier_series(std::size_t n, double base_radius = 50.0);
+    Epicycles(std::vector<Epicycle> epicycles);
 
     ~Epicycles();
 
@@ -28,9 +28,10 @@ public:
     void rotate(double timestep);
 
 private:
-    Epicycles(std::vector<Epicycle> epicycles);
     std::vector<Epicycle> epicycles_;
 };
+
+Epicycles square_wave(std::size_t n, double base_radius = 50.0);
 
 }
 

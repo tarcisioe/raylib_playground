@@ -58,7 +58,7 @@ try {
     auto origin = Vec2{300, 400};
     auto wave_ys = std::deque<double>{};
 
-    auto epicycles = Epicycles::fourier_series(10, 100.0);
+    auto epicycles = square_wave(10, 100.0);
 
     while (not raylib.should_close()) {
         auto canvas = raylib.canvas();

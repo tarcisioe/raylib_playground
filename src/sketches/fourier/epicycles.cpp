@@ -70,7 +70,7 @@ Epicycles::Epicycles(std::vector<Epicycle> epicycles):
 
 Epicycles::~Epicycles() = default;
 
-Epicycles Epicycles::fourier_series(std::size_t n, double base_radius)
+Epicycles square_wave(std::size_t n, double base_radius)
 {
     using namespace std::numbers;
 
