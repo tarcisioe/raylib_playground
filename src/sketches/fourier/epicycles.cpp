@@ -13,45 +13,21 @@ using namespace math::geom;
 
 namespace fourier {
 
-class Epicycle {
-public:
-    Epicycle(double radius, double phase = 0.0, double freq = 1.0):
-        radius_{radius},
-        angle_{phase},
-        freq_{freq}
-    {}
+Vec2 Epicycle::tip(Vec2 const& origin) const
+{
+    return origin + Polar{radius_, angle_}.to_cartesian();
+}
 
-    double radius() const
-    {
-        return radius_;
-    }
+void Epicycle::draw(canvas::Canvas& canvas, Vec2 const& origin) const
+{
+    auto tip = this->tip(origin);
 
-    void rotate(double timestep)
-    {
-        angle_ += timestep * freq_;
-    }
-
-    Vec2 tip(Vec2 const& origin) const
-    {
-        return origin + Polar{radius_, angle_}.to_cartesian();
-    }
-
-    void draw(canvas::Canvas& d, Vec2 const& origin) const
-    {
-        auto tip = this->tip(origin);
-
-        d.no_fill();
-        d.draw_circle(origin, radius_);
-        d.draw_line(origin, tip);
-        d.fill(color::WHITE);
-        d.draw_circle(tip, 1);
-    }
-
-private:
-    double radius_;
-    double angle_;
-    double freq_;
-};
+    canvas.no_fill();
+    canvas.draw_circle(origin, radius_);
+    canvas.draw_line(origin, tip);
+    canvas.fill(color::WHITE);
+    canvas.draw_circle(tip, 1);
+}
 
 auto tips(Vec2 const& origin, std::vector<Epicycle> const& epicycles)
 {
@@ -69,22 +45,6 @@ Epicycles::Epicycles(std::vector<Epicycle> epicycles):
 {}
 
 Epicycles::~Epicycles() = default;
-
-Epicycles square_wave(std::size_t n, double base_radius, double base_phase)
-{
-    using namespace std::numbers;
-
-    auto epicycles = std::vector<Epicycle>{};
-    epicycles.reserve(n);
-
-    for (auto i = 0u; i < n; ++i) {
-        auto n_i = 2.0*i + 1.0;
-        auto radius = base_radius * (4.0 / (n_i * pi));
-        epicycles.push_back(Epicycle{radius, base_phase, n_i});
-    }
-
-    return Epicycles{std::move(epicycles)};
-}
 
 Vec2 Epicycles::tip(Vec2 origin) const
 {

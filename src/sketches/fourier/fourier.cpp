@@ -13,7 +13,23 @@
 #include "./epicycles.hpp"
 
 using namespace math::geom;
+using namespace fourier;
 
+Epicycles square_wave(std::size_t n, double base_radius, double base_phase = 0.00)
+{
+    using namespace std::numbers;
+
+    auto epicycles = std::vector<Epicycle>{};
+    epicycles.reserve(n);
+
+    for (auto i = 0u; i < n; ++i) {
+        auto n_i = 2.0*i + 1.0;
+        auto radius = base_radius * (4.0 / (n_i * pi));
+        epicycles.push_back(Epicycle{radius, base_phase, n_i});
+    }
+
+    return Epicycles{std::move(epicycles)};
+}
 
 void draw_wave(canvas::Canvas& canvas, std::deque<double> const& wave_ys, double base_x)
 {
@@ -72,7 +88,7 @@ public:
     }
 
 private:
-    fourier::Epicycles epicycles{fourier::square_wave(10, 100.0)};
+    Epicycles epicycles{square_wave(10, 100.0)};
     std::deque<double> wave_ys{};
     Vec2 origin{300, 400};
 };

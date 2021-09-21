@@ -27,6 +27,9 @@ void draw_points(canvas::Canvas& canvas, std::deque<Vec2> const& points, Vec2)
 }
 
 
+// Epicycles
+
+
 class SquareWave {
 public:
     constexpr static auto width = 1000;
@@ -64,8 +67,8 @@ public:
     }
 
 private:
-    fourier::Epicycles epicycles_x{fourier::square_wave(1, 80.0, std::numbers::pi/2)};
-    fourier::Epicycles epicycles_y{fourier::square_wave(10, 80.0)};
+    fourier::Epicycles epicycles_x{{}};
+    fourier::Epicycles epicycles_y{{}};
     std::deque<Vec2> points{};
     Vec2 origin{500, 500};
 };

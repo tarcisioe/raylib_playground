@@ -4,11 +4,8 @@
 #include <cstdint>
 #include <vector>
 
-#include "math/geom/vec2.hpp"
-
 namespace math::geom {
     class Vec2;
-    struct Polar;
 };
 
 namespace canvas {
@@ -17,7 +14,34 @@ namespace canvas {
 
 namespace fourier {
 
-class Epicycle;
+class Epicycle {
+public:
+    Epicycle(double radius, double phase = 0.0, double freq = 1.0):
+        radius_{radius},
+        angle_{phase},
+        freq_{freq}
+    {}
+
+    double radius() const
+    {
+        return radius_;
+    }
+
+    void rotate(double timestep)
+    {
+        angle_ += timestep * freq_;
+    }
+
+    math::geom::Vec2 tip(math::geom::Vec2 const& origin) const;
+
+    void draw(canvas::Canvas& d, math::geom::Vec2 const& origin) const;
+
+private:
+    double radius_;
+    double angle_;
+    double freq_;
+};
+
 
 class Epicycles {
 public:
@@ -32,8 +56,6 @@ public:
 private:
     std::vector<Epicycle> epicycles_;
 };
-
-Epicycles square_wave(std::size_t n, double base_radius = 50.0, double base_phase = 0.0);
 
 }
 
