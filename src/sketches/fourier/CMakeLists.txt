@@ -13,6 +13,7 @@ target_link_libraries(
         PRIVATE
             canvas
             math
-            raylibpp
+            raylibpp_runner
+            sketch
             CONAN_PKG::range-v3
 )

@@ -8,7 +8,7 @@
 
 #include "canvas/canvas.hpp"
 #include "math/geom/vec2.hpp"
-#include "raylibpp/raylibpp.hpp"
+#include "raylibpp_runner/runner.hpp"
 
 #include "./epicycles.hpp"
 
@@ -41,28 +41,16 @@ void draw_wave(canvas::Canvas& canvas, std::deque<double> const& wave_ys, double
 }
 
 
-int main()
-try {
-    using namespace raylibpp;
-    using namespace canvas;
-    using namespace fourier;
-    using namespace color;
+class SquareWave {
+public:
+    constexpr static auto width = 1200;
+    constexpr static auto height = 800;
 
-    using math::geom::Vec2;
+    constexpr static auto name = "Square wave with fourier series";
 
-    constexpr auto window_width = 1200;
-    constexpr auto window_height = 800;
-
-    auto raylib = Raylib{window_width, window_height, "My Raylib Window."};
-    raylib.set_target_fps(60);
-
-    auto origin = Vec2{300, 400};
-    auto wave_ys = std::deque<double>{};
-
-    auto epicycles = square_wave(10, 100.0);
-
-    while (not raylib.should_close()) {
-        auto canvas = Canvas{raylib.start_drawing()};
+    void draw(canvas::Canvas& canvas)
+    {
+        using namespace color;
 
         canvas.clear_background(BLACK);
 
@@ -83,6 +71,16 @@ try {
         epicycles.rotate(0.025);
     }
 
+private:
+    fourier::Epicycles epicycles{fourier::square_wave(10, 100.0)};
+    std::deque<double> wave_ys{};
+    Vec2 origin{300, 400};
+};
+
+
+int main()
+try {
+    raylibpp_runner::run_sketch(SquareWave{});
 } catch (...) {
     std::clog << "Unknown error. Aborting.";
     return 1;
