@@ -50,7 +50,7 @@ try {
     auto radius = 100.0;
 
     while (not raylib.should_close()) {
-        auto canvas = raylib.canvas();
+        auto canvas = canvas::Canvas{raylib.start_drawing()};
         Circle{{300, 300}, radius}.draw(canvas);
 
         ++radius;

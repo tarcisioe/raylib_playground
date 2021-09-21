@@ -62,7 +62,7 @@ try {
     auto epicycles = square_wave(10, 100.0);
 
     while (not raylib.should_close()) {
-        auto canvas = raylib.canvas();
+        auto canvas = Canvas{raylib.start_drawing()};
 
         canvas.clear_background(BLACK);
 

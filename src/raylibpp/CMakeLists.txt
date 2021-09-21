@@ -19,7 +19,8 @@ target_include_directories(
 target_link_libraries(
     raylibpp
         PUBLIC
-            canvas
+            color
+            math
             utility
             project_options
             CONAN_PKG::raylib
