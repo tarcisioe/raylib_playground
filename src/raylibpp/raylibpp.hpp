@@ -21,7 +21,6 @@ class RaylibImpl;
 
 class RaylibDrawer{
 public:
-    RaylibDrawer(impl::RaylibImpl& raylib_impl);
     RaylibDrawer(RaylibDrawer const&) = delete;
     RaylibDrawer(RaylibDrawer&&) = default;
 
@@ -39,6 +38,10 @@ public:
     void clear_background(color::ColorRGBA const& c);
 
 private:
+    friend class Raylib;
+
+    RaylibDrawer(impl::RaylibImpl& raylib_impl);
+
     impl::RaylibImpl *impl;
     ::util::MoveMarker moved;
 };
