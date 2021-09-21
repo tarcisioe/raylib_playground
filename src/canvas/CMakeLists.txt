@@ -19,6 +19,7 @@ target_link_libraries(
         PUBLIC
             project_options
             color
+            math
 )
 
 # add_subdirectory(tests)

@@ -11,8 +11,6 @@ target_sources(
 target_link_libraries(
     fourier
         PRIVATE
-            canvas
-            math
             raylibpp_runner
             sketch
             CONAN_PKG::range-v3
@@ -31,8 +29,6 @@ target_sources(
 target_link_libraries(
     fourier2d
         PRIVATE
-            canvas
-            math
             raylibpp_runner
             sketch
             CONAN_PKG::range-v3

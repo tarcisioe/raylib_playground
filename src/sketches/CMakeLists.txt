@@ -9,9 +9,8 @@ target_sources(
 target_link_libraries(
     testing_grounds
         PRIVATE
-            canvas
-            math
-            raylibpp
+            raylibpp_runner
+            sketch
 )
 
 add_subdirectory(fourier)

@@ -18,7 +18,6 @@ target_link_libraries(
     raylibpp_runner
         PUBLIC
             project_options
-            canvas
             sketch
             raylibpp
 )
