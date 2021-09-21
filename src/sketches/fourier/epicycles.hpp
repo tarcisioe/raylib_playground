@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <vector>
 
+#include "math/geom/vec2.hpp"
+
 namespace math::geom {
     class Vec2;
     struct Polar;
@@ -23,7 +25,7 @@ public:
 
     ~Epicycles();
 
-    math::geom::Vec2 tip(math::geom::Vec2 const& origin) const;
+    math::geom::Vec2 tip(math::geom::Vec2 origin) const;
     void draw(canvas::Canvas& canvas, math::geom::Vec2 const& origin) const;
     void rotate(double timestep);
 
@@ -31,7 +33,7 @@ private:
     std::vector<Epicycle> epicycles_;
 };
 
-Epicycles square_wave(std::size_t n, double base_radius = 50.0);
+Epicycles square_wave(std::size_t n, double base_radius = 50.0, double base_phase = 0.0);
 
 }
 

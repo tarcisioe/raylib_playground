@@ -17,3 +17,23 @@ target_link_libraries(
             sketch
             CONAN_PKG::range-v3
 )
+
+add_executable(fourier2d)
+
+target_sources(
+    fourier2d
+        PRIVATE
+            epicycles.hpp
+            epicycles.cpp
+            fourier2d.cpp
+)
+
+target_link_libraries(
+    fourier2d
+        PRIVATE
+            canvas
+            math
+            raylibpp_runner
+            sketch
+            CONAN_PKG::range-v3
+)

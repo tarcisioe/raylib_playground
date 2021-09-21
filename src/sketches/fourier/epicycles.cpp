@@ -70,7 +70,7 @@ Epicycles::Epicycles(std::vector<Epicycle> epicycles):
 
 Epicycles::~Epicycles() = default;
 
-Epicycles square_wave(std::size_t n, double base_radius)
+Epicycles square_wave(std::size_t n, double base_radius, double base_phase)
 {
     using namespace std::numbers;
 
@@ -80,15 +80,15 @@ Epicycles square_wave(std::size_t n, double base_radius)
     for (auto i = 0u; i < n; ++i) {
         auto n_i = 2.0*i + 1.0;
         auto radius = base_radius * (4.0 / (n_i * pi));
-        epicycles.push_back(Epicycle{radius, 0.0, n_i});
+        epicycles.push_back(Epicycle{radius, base_phase, n_i});
     }
 
     return Epicycles{std::move(epicycles)};
 }
 
-Vec2 Epicycles::tip(Vec2 const& origin) const
+Vec2 Epicycles::tip(Vec2 origin) const
 {
-    auto current = Vec2{};
+    auto current = origin;
 
     for (auto tip: tips(origin, epicycles_)) {
         current = tip;
