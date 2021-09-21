@@ -4,7 +4,7 @@
 #include "canvas/canvas.hpp"
 #include "math/geom/bezier.hpp"
 #include "math/geom/vec2.hpp"
-#include "raylibpp/raylibpp.hpp"
+#include "raylibpp_runner/runner.hpp"
 
 using namespace math::geom;
 
@@ -36,26 +36,28 @@ private:
 };
 
 
-int main()
-try {
-    using namespace raylibpp;
-    using math::geom::Vec2;
+class TestingGrounds {
+public:
+    constexpr auto static width = 600;
+    constexpr auto static height = 600;
 
-    constexpr auto window_width = 600;
-    constexpr auto window_height = 600;
+    constexpr auto static name = "Testing grounds";
 
-    auto raylib = Raylib{window_width, window_height, "My Raylib Window."};
-    raylib.set_target_fps(60);
-
-    auto radius = 100.0;
-
-    while (not raylib.should_close()) {
-        auto canvas = canvas::Canvas{raylib.start_drawing()};
+    void draw(canvas::Canvas& canvas) {
+        canvas.clear_background(color::BLACK);
         Circle{{300, 300}, radius}.draw(canvas);
 
         ++radius;
     }
 
+private:
+    double radius{100.0};
+};
+
+
+int main()
+try {
+    raylibpp_runner::run_sketch(TestingGrounds{});
 } catch (...) {
     std::clog << "Unknown error. Aborting.";
     return 1;
