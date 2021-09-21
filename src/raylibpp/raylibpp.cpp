@@ -44,33 +44,50 @@ public:
 class RaylibDrawer{
 public:
     RaylibDrawer(impl::RaylibImpl& raylib_impl):
-        impl{raylib_impl}
-    {}
+        impl{&raylib_impl}
+    {
+        BeginDrawing();
+    }
+
+    RaylibDrawer(RaylibDrawer&&) = default;
+    RaylibDrawer(RaylibDrawer const&) = delete;
+
+    ~RaylibDrawer()
+    {
+        if (not moved) {
+            EndDrawing();
+        }
+    }
+
+    RaylibDrawer& operator=(RaylibDrawer&&) = default;
+    RaylibDrawer& operator=(RaylibDrawer const&) = delete;
 
     void stroke(color::ColorRGBA const& c)
     {
-        impl.stroke = c;
+        impl->stroke = c;
     }
 
     void fill(color::ColorRGBA const& c)
     {
-        impl.fill = c;
+        impl->fill = c;
     }
 
     void no_stroke()
     {
-        impl.stroke = std::nullopt;
+        impl->stroke = std::nullopt;
     }
 
     void no_fill()
     {
-        impl.fill = std::nullopt;
+        impl->fill = std::nullopt;
     }
 
     void draw_line(Vec2 const& v1, Vec2 const& v2)
     {
-        if (impl.stroke) {
-            DrawLineV(to_raylib(v1), to_raylib(v2), to_raylib(*impl.stroke));
+        auto &stroke = impl->stroke;
+
+        if (stroke) {
+            DrawLineV(to_raylib(v1), to_raylib(v2), to_raylib(*stroke));
         }
     }
 
@@ -79,12 +96,15 @@ public:
         auto v = to_raylib(center);
         auto r = static_cast<float>(radius);
 
-        if (impl.fill) {
-            DrawCircleSector(v, r, 0, 360, 32, to_raylib(*impl.stroke));
+        auto &fill = impl->fill;
+        auto &stroke = impl->stroke;
+
+        if (fill) {
+            DrawCircleSector(v, r, 0, 360, 32, to_raylib(*(fill)));
         }
 
-        if (impl.stroke) {
-            DrawCircleSectorLines(v, r, 0, 360, 32, to_raylib(*impl.stroke));
+        if (stroke) {
+            DrawCircleSectorLines(v, r, 0, 360, 32, to_raylib(*(stroke)));
         }
     }
 
@@ -94,8 +114,8 @@ public:
     }
 
 private:
-    impl::RaylibImpl& impl;
-    DrawingGuard guard;
+    impl::RaylibImpl *impl;
+    ::util::MoveMarker moved;
 };
 
 Raylib::Raylib(int width, int height, std::string_view title):

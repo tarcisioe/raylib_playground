@@ -7,10 +7,14 @@ class MoveMarker {
 public:
     MoveMarker() = default;
 
+    MoveMarker(MoveMarker const&) = default;
     MoveMarker(MoveMarker&& other)
     {
         other.moved = true;
     }
+
+    MoveMarker& operator=(MoveMarker const&) = default;
+    MoveMarker& operator=(MoveMarker&&) = default;
 
     operator bool() const
     {

@@ -8,7 +8,7 @@ class Canvas;
 }
 
 namespace color {
-class ColorRGBA;
+struct ColorRGBA;
 }
 
 namespace raylibpp {

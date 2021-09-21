@@ -12,25 +12,6 @@
 
 namespace raylibpp::util {
 
-struct DrawingGuard {
-    DrawingGuard()
-    {
-        BeginDrawing();
-    }
-
-    DrawingGuard(DrawingGuard const&) = delete;
-    DrawingGuard(DrawingGuard&& other) = default;
-
-    ~DrawingGuard() {
-        if (not moved) {
-            EndDrawing();
-        }
-    }
-
-private:
-    ::util::MoveMarker moved;
-};
-
 inline Color to_raylib(color::ColorRGBA const& c) {
     return {c.r, c.g, c.b, c.a};
 }
