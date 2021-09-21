@@ -1,3 +1,4 @@
+add_subdirectory(color)
 add_subdirectory(canvas)
 add_subdirectory(math)
 add_subdirectory(raylibpp)

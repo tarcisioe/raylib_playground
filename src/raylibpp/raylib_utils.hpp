@@ -6,7 +6,7 @@
 #undef BLACK
 
 #include "math/geom/vec2.hpp"
-#include "canvas/color.hpp"
+#include "color/color.hpp"
 #include "utility/move.hpp"
 
 
@@ -31,11 +31,11 @@ private:
     ::util::MoveMarker moved;
 };
 
-Color to_raylib(canvas::ColorRGBA const& c) {
+inline Color to_raylib(color::ColorRGBA const& c) {
     return {c.r, c.g, c.b, c.a};
 }
 
-Vector2 to_raylib(math::geom::Vec2 const& v) {
+inline Vector2 to_raylib(math::geom::Vec2 const& v) {
     return {
         static_cast<float>(v.x()),
         static_cast<float>(v.y()),

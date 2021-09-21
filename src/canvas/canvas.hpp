@@ -4,7 +4,7 @@
 #include <memory>
 #include "math/geom/vec2.hpp"
 
-#include "./color.hpp"
+#include "color/color.hpp"
 
 namespace canvas {
 
@@ -15,12 +15,12 @@ public:
         inner{std::make_unique<Inner<D>>(std::move(d))}
     {}
 
-    void fill(canvas::ColorRGBA const& c)
+    void fill(color::ColorRGBA const& c)
     {
         inner->fill(c);
     }
 
-    void stroke(canvas::ColorRGBA const& c)
+    void stroke(color::ColorRGBA const& c)
     {
         inner->stroke(c);
     }
@@ -45,7 +45,7 @@ public:
         inner->draw_circle(center, radius);
     }
 
-    void clear_background(canvas::ColorRGBA const& c)
+    void clear_background(color::ColorRGBA const& c)
     {
         inner->clear_background(c);
     }
@@ -53,13 +53,13 @@ public:
 private:
     struct InnerBase {
         virtual ~InnerBase() = default;
-        virtual void fill(canvas::ColorRGBA const& c) = 0;
-        virtual void stroke(canvas::ColorRGBA const& c) = 0;
+        virtual void fill(color::ColorRGBA const& c) = 0;
+        virtual void stroke(color::ColorRGBA const& c) = 0;
         virtual void no_fill() = 0;
         virtual void no_stroke() = 0;
         virtual void draw_line(math::geom::Vec2 const& v1, math::geom::Vec2 const& v2) = 0;
         virtual void draw_circle(math::geom::Vec2 const& center, double radius) = 0;
-        virtual void clear_background(canvas::ColorRGBA const& c) = 0;
+        virtual void clear_background(color::ColorRGBA const& c) = 0;
     };
 
     template <typename D>
@@ -68,12 +68,12 @@ private:
             d_{std::move(d)}
         {}
 
-        void fill(canvas::ColorRGBA const& c) override
+        void fill(color::ColorRGBA const& c) override
         {
             d_.fill(c);
         }
 
-        void stroke(canvas::ColorRGBA const& c) override
+        void stroke(color::ColorRGBA const& c) override
         {
             d_.stroke(c);
         }
@@ -98,7 +98,7 @@ private:
             d_.draw_circle(center, radius);
         }
 
-        void clear_background(canvas::ColorRGBA const& c) override
+        void clear_background(color::ColorRGBA const& c) override
         {
             d_.clear_background(c);
         }

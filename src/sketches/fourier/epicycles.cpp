@@ -43,7 +43,7 @@ public:
         d.no_fill();
         d.draw_circle(origin, radius_);
         d.draw_line(origin, tip);
-        d.fill(canvas::colors::WHITE);
+        d.fill(color::WHITE);
         d.draw_circle(tip, 1);
     }
 

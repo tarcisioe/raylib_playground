@@ -46,6 +46,7 @@ try {
     using namespace raylibpp;
     using namespace canvas;
     using namespace fourier;
+    using namespace color;
 
     using math::geom::Vec2;
 
@@ -63,7 +64,7 @@ try {
     while (not raylib.should_close()) {
         auto canvas = raylib.canvas();
 
-        canvas.clear_background(ColorRGBA{0, 0, 0});
+        canvas.clear_background(BLACK);
 
         auto tip = epicycles.tip(origin);
         wave_ys.push_front(tip.y());

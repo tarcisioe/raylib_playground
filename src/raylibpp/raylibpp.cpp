@@ -2,7 +2,7 @@
 
 #include "math/geom/vec2.hpp"
 #include "canvas/canvas.hpp"
-#include "canvas/color.hpp"
+#include "color/color.hpp"
 #include "utility/move.hpp"
 
 #include "./raylibpp.hpp"
@@ -33,8 +33,8 @@ public:
         }
     }
 
-    std::optional<canvas::ColorRGBA> stroke{canvas::colors::WHITE};
-    std::optional<canvas::ColorRGBA> fill{};
+    std::optional<color::ColorRGBA> stroke{color::WHITE};
+    std::optional<color::ColorRGBA> fill{};
 
     ::util::MoveMarker moved;
 };
@@ -47,12 +47,12 @@ public:
         impl{raylib_impl}
     {}
 
-    void stroke(canvas::ColorRGBA const& c)
+    void stroke(color::ColorRGBA const& c)
     {
         impl.stroke = c;
     }
 
-    void fill(canvas::ColorRGBA const& c)
+    void fill(color::ColorRGBA const& c)
     {
         impl.fill = c;
     }
@@ -88,7 +88,7 @@ public:
         }
     }
 
-    void clear_background(canvas::ColorRGBA const& c)
+    void clear_background(color::ColorRGBA const& c)
     {
         ClearBackground(to_raylib(c));
     }

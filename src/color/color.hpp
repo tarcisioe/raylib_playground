@@ -1,9 +1,9 @@
-#ifndef CANVAS_COLOR_HPP
-#define CANVAS_COLOR_HPP
+#ifndef COLOR_COLOR_HPP
+#define COLOR_COLOR_HPP
 
 #include <cstdint>
 
-namespace canvas {
+namespace color {
 
 struct ColorRGBA {
     constexpr ColorRGBA() = default;
@@ -24,12 +24,8 @@ struct ColorRGBA {
     uint8_t r{0}, g{0}, b{0}, a{255};
 };
 
-namespace colors {
-
 constinit inline auto WHITE = ColorRGBA{255, 255, 255};
 constinit inline auto BLACK = ColorRGBA{0, 0, 0};
-
-}
 
 }
 

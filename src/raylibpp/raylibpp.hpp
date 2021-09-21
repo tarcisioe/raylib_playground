@@ -5,6 +5,9 @@
 
 namespace canvas {
 class Canvas;
+}
+
+namespace color {
 class ColorRGBA;
 }
 

@@ -1,24 +1,23 @@
-add_library(canvas)
+add_library(color)
 
 target_sources(
-    canvas
+    color
         PUBLIC
-            canvas.hpp
+            color.hpp
         PRIVATE
-            canvas.cpp
+            color.cpp
 )
 
 target_include_directories(
-    canvas
+    color
         PUBLIC
             ${CMAKE_SOURCE_DIR}/src
 )
 
 target_link_libraries(
-    canvas
+    color
         PUBLIC
             project_options
-            color
 )
 
 # add_subdirectory(tests)
