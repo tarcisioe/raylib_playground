@@ -21,6 +21,8 @@ add_executable(fourier2d)
 target_sources(
     fourier2d
         PRIVATE
+            train.hpp
+            train.cpp
             epicycles.hpp
             epicycles.cpp
             fourier2d.cpp

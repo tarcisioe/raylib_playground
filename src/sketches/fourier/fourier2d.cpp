@@ -1,21 +1,75 @@
+#include <array>
+#include <complex>
 #include <deque>
 #include <iostream>
 
-#include <range/v3/view/iota.hpp>
-#include <range/v3/view/sliding.hpp>
+#include <range/v3/action/sort.hpp>
+#include <range/v3/numeric/accumulate.hpp>
+#include <range/v3/range/concepts.hpp>
+#include <range/v3/view/indices.hpp>
 #include <range/v3/view/transform.hpp>
-#include <range/v3/view/zip.hpp>
+#include <range/v3/view/enumerate.hpp>
+#include <range/v3/view/sliding.hpp>
 
 #include "canvas/canvas.hpp"
 #include "math/geom/vec2.hpp"
 #include "raylibpp_runner/runner.hpp"
 
+#include <cmath>
+
 #include "./epicycles.hpp"
+#include "./train.hpp"
+
 
 using namespace math::geom;
+using namespace fourier;
 
+auto dft(ranges::forward_range auto const& signal)
+{
+    using namespace ranges;
 
-void draw_points(canvas::Canvas& canvas, std::deque<Vec2> const& points, Vec2)
+    auto const N = ranges::distance(signal);
+
+    auto calculate_Xk = [&signal, N](auto k)
+    {
+        auto calculate_term = [k, N](auto n_xn)
+        {
+            auto [n, xn] = n_xn;
+            auto phi = (std::numbers::pi * 2 * static_cast<double>(k) * static_cast<double>(n))/static_cast<double>(N);
+            return std::complex<double>{xn * cos(phi), -(xn * sin(phi))};
+        };
+
+        auto Xk = accumulate(signal | views::enumerate | views::transform(calculate_term), std::complex<double>{0.0, 0.0});
+
+        auto result = Xk/static_cast<double>(N);
+        return result;
+    };
+
+    return views::indices(N) | views::transform(calculate_Xk);
+}
+
+auto dft_epicycles(ranges::forward_range auto const& signal, double phase = 0.0)
+{
+    using namespace ranges;
+
+    auto make_epicycle = [&](auto k_c)
+    {
+        auto [k, c] = k_c;
+        return Epicycle{abs(c), std::arg(c) + phase, static_cast<double>(static_cast<long>(k))};
+    };
+
+    auto epicycles =
+        dft(signal)
+        | views::enumerate
+        | views::transform(make_epicycle)
+        | ranges::to<std::vector>()
+        | actions::sort([](auto a, auto b){ return a.radius() > b.radius(); })
+    ;
+
+    return Epicycles{epicycles};
+}
+
+void draw_points(canvas::Canvas& canvas, std::deque<Vec2> const& points)
 {
     using namespace ranges;
 
@@ -26,16 +80,35 @@ void draw_points(canvas::Canvas& canvas, std::deque<Vec2> const& points, Vec2)
     }
 }
 
+auto circle(int points, double radius)
+{
+    using namespace ranges;
 
-// Epicycles
+    auto calculate_circle_point = [&](auto point)
+    {
+        auto angle = static_cast<double>(point)/points * std::numbers::pi * 2;
 
+        return Vec2{
+            radius * cos(angle),
+            radius * sin(angle),
+        };
+    };
 
-class SquareWave {
+    return views::indices(points) | views::transform(calculate_circle_point) | to<std::vector>();
+}
+
+class Fourier2DDrawer {
 public:
     constexpr static auto width = 1000;
     constexpr static auto height = 1000;
 
-    constexpr static auto name = "Square wave with fourier series";
+    constexpr static auto name = "2D drawing with fourier transform";
+
+    Fourier2DDrawer(ranges::forward_range auto const& drawing):
+        epicycles_x{dft_epicycles(drawing | ranges::views::transform([](auto p){ return p.x(); }))},
+        epicycles_y{dft_epicycles(drawing | ranges::views::transform([](auto p){ return p.y(); }), -std::numbers::pi/2)},
+        size{ranges::size(drawing)}
+    {}
 
     void draw(canvas::Canvas& canvas)
     {
@@ -56,27 +129,31 @@ public:
         canvas.draw_line(tip_x, points.front());
         canvas.draw_line(tip_y, points.front());
 
-        draw_points(canvas, points, origin);
+        draw_points(canvas, points);
 
-        if (points.size() > 400) {
+        if (points.size() > 5000) {
             points.pop_back();
         }
 
-        epicycles_x.rotate(0.005);
-        epicycles_y.rotate(0.025);
+        auto dt = std::numbers::pi * 2 / static_cast<double>(size);
+
+        epicycles_x.rotate(dt);
+        epicycles_y.rotate(dt);
     }
 
 private:
-    fourier::Epicycles epicycles_x{{}};
-    fourier::Epicycles epicycles_y{{}};
+    fourier::Epicycles epicycles_x;
+    fourier::Epicycles epicycles_y;
     std::deque<Vec2> points{};
     Vec2 origin{500, 500};
+    std::size_t size;
 };
-
 
 int main()
 try {
-    raylibpp_runner::run_sketch(SquareWave{});
+    auto sketch = Fourier2DDrawer{train};
+
+    raylibpp_runner::run_sketch(sketch);
 } catch (...) {
     std::clog << "Unknown error. Aborting.";
     return 1;
