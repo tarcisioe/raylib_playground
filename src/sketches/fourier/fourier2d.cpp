@@ -1,18 +1,14 @@
 #include <array>
+#include <cmath>
 #include <complex>
 #include <deque>
 #include <iostream>
 
-#include <range/v3/range/conversion.hpp>
-#include <range/v3/view/indices.hpp>
-#include <range/v3/view/transform.hpp>
 #include <range/v3/view/sliding.hpp>
 
 #include "canvas/canvas.hpp"
 #include "math/geom/vec2.hpp"
 #include "raylibpp_runner/runner.hpp"
-
-#include <cmath>
 
 #include "./dft_epicycles.hpp"
 #include "./epicycles.hpp"
@@ -33,23 +29,6 @@ void draw_points(canvas::Canvas& canvas, std::deque<Vec2> const& points)
     for (auto pair: point_pairs) {
         canvas.draw_line(pair[0], pair[1]);
     }
-}
-
-auto circle(int points, double radius)
-{
-    using namespace ranges;
-
-    auto calculate_circle_point = [&](auto point)
-    {
-        auto angle = static_cast<double>(point)/points * two_pi;
-
-        return Vec2{
-            radius * cos(angle),
-            radius * sin(angle),
-        };
-    };
-
-    return views::indices(points) | views::transform(calculate_circle_point) | to<std::vector>();
 }
 
 class Fourier2DDrawer {
