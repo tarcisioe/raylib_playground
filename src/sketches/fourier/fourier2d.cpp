@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <range/v3/view/sliding.hpp>
+#include <range/v3/view/reverse.hpp>
 
 #include "canvas/canvas.hpp"
 #include "math/geom/vec2.hpp"
@@ -20,11 +21,11 @@ constinit auto half_pi = std::numbers::pi / 2;
 using namespace math::geom;
 using namespace fourier;
 
-void draw_points(canvas::Canvas& canvas, std::deque<Vec2> const& points)
+void draw_points(canvas::Canvas& canvas, std::span<Vec2> const& points)
 {
     using namespace ranges;
 
-    auto point_pairs = points | views::sliding(2);
+    auto point_pairs = points | views::reverse | views::sliding(2);
 
     for (auto pair: point_pairs) {
         canvas.draw_line(pair[0], pair[1]);
@@ -56,19 +57,15 @@ public:
 
         auto tip_x = epicycles_x.tip(x_origin, time);
         auto tip_y = epicycles_y.tip(y_origin, time);
-        points.push_front({tip_x.x(), tip_y.y()});
+        points.push_back({tip_x.x(), tip_y.y()});
 
         epicycles_x.draw(canvas, x_origin, time);
         epicycles_y.draw(canvas, y_origin, time);
 
-        canvas.draw_line(tip_x, points.front());
-        canvas.draw_line(tip_y, points.front());
+        canvas.draw_line(tip_x, points.back());
+        canvas.draw_line(tip_y, points.back());
 
         draw_points(canvas, points);
-
-        if (points.size() > 5000) {
-            points.pop_back();
-        }
 
         auto dt = two_pi / static_cast<double>(size);
         time += dt;
@@ -88,7 +85,7 @@ private:
 
     fourier::Epicycles epicycles_x;
     fourier::Epicycles epicycles_y;
-    std::deque<Vec2> points{};
+    std::vector<Vec2> points{};
     Vec2 origin{500, 500};
     std::size_t size;
     double time{0.0};
