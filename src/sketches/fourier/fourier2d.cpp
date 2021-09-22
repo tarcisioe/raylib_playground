@@ -20,6 +20,8 @@
 #include "./epicycles.hpp"
 #include "./train.hpp"
 
+constinit auto two_pi = std::numbers::pi * 2;
+constinit auto half_pi = std::numbers::pi / 2;
 
 using namespace math::geom;
 using namespace fourier;
@@ -35,7 +37,7 @@ auto dft(ranges::forward_range auto const& signal)
         auto calculate_term = [k, N](auto n_xn)
         {
             auto [n, xn] = n_xn;
-            auto phi = (std::numbers::pi * 2 * static_cast<double>(k) * static_cast<double>(n))/static_cast<double>(N);
+            auto phi = (two_pi * static_cast<double>(k) * static_cast<double>(n))/static_cast<double>(N);
             return std::complex<double>{xn * cos(phi), -(xn * sin(phi))};
         };
 
@@ -86,7 +88,7 @@ auto circle(int points, double radius)
 
     auto calculate_circle_point = [&](auto point)
     {
-        auto angle = static_cast<double>(point)/points * std::numbers::pi * 2;
+        auto angle = static_cast<double>(point)/points * two_pi;
 
         return Vec2{
             radius * cos(angle),
@@ -106,7 +108,7 @@ public:
 
     Fourier2DDrawer(ranges::forward_range auto const& drawing):
         epicycles_x{dft_epicycles(drawing | ranges::views::transform([](auto p){ return p.x(); }))},
-        epicycles_y{dft_epicycles(drawing | ranges::views::transform([](auto p){ return p.y(); }), -std::numbers::pi/2)},
+        epicycles_y{dft_epicycles(drawing | ranges::views::transform([](auto p){ return p.y(); }), -half_pi)},
         size{ranges::size(drawing)}
     {}
 
@@ -135,9 +137,13 @@ public:
             points.pop_back();
         }
 
-        auto dt = std::numbers::pi * 2 / static_cast<double>(size);
-
+        auto dt = two_pi / static_cast<double>(size);
         time += dt;
+
+        if (time > two_pi) {
+            points.clear();
+            time = 0;
+        }
     }
 
 private:
