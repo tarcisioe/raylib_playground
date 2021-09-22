@@ -119,12 +119,12 @@ public:
         auto x_origin = origin - Vec2{-100, 300};
         auto y_origin = origin - Vec2{300, -100};
 
-        auto tip_x = epicycles_x.tip(x_origin);
-        auto tip_y = epicycles_y.tip(y_origin);
+        auto tip_x = epicycles_x.tip(x_origin, time);
+        auto tip_y = epicycles_y.tip(y_origin, time);
         points.push_front({tip_x.x(), tip_y.y()});
 
-        epicycles_x.draw(canvas, x_origin);
-        epicycles_y.draw(canvas, y_origin);
+        epicycles_x.draw(canvas, x_origin, time);
+        epicycles_y.draw(canvas, y_origin, time);
 
         canvas.draw_line(tip_x, points.front());
         canvas.draw_line(tip_y, points.front());
@@ -137,8 +137,7 @@ public:
 
         auto dt = std::numbers::pi * 2 / static_cast<double>(size);
 
-        epicycles_x.rotate(dt);
-        epicycles_y.rotate(dt);
+        time += dt;
     }
 
 private:
@@ -147,6 +146,7 @@ private:
     std::deque<Vec2> points{};
     Vec2 origin{500, 500};
     std::size_t size;
+    double time{0.0};
 };
 
 int main()

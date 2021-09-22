@@ -70,10 +70,10 @@ public:
 
         canvas.clear_background(BLACK);
 
-        auto tip = epicycles.tip(origin);
+        auto tip = epicycles.tip(origin, time);
         wave_ys.push_front(tip.y());
 
-        epicycles.draw(canvas, origin);
+        epicycles.draw(canvas, origin, time);
 
         auto base_wave_x = origin.x() + 350;
         canvas.draw_line(tip, {base_wave_x, wave_ys.front()});
@@ -84,13 +84,14 @@ public:
             wave_ys.pop_back();
         }
 
-        epicycles.rotate(0.025);
+        time += 0.025;
     }
 
 private:
     Epicycles epicycles{square_wave(10, 100.0)};
     std::deque<double> wave_ys{};
     Vec2 origin{300, 400};
+    double time{0.0};
 };
 
 
