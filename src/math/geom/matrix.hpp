@@ -74,7 +74,7 @@ public:
 
     constexpr int columns() const
     {
-        return rows_;
+        return columns_;
     }
 
 private:
