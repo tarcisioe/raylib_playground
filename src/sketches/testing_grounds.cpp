@@ -44,7 +44,7 @@ public:
     constexpr auto static name = "Testing grounds";
 
     void draw(canvas::Canvas& canvas) {
-        canvas.clear_background(color::BLACK);
+        canvas.clear_background(color::rgba::BLACK);
         Circle{{300, 300}, radius}.draw(canvas);
 
         ++radius;

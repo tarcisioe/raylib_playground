@@ -26,7 +26,7 @@ void Epicycle::draw(canvas::Canvas& canvas, Vec2 const& origin, double time) con
     canvas.no_fill();
     canvas.draw_circle(origin, radius_);
     canvas.draw_line(origin, tip);
-    canvas.fill(color::WHITE);
+    canvas.fill(color::rgba::WHITE);
     canvas.draw_circle(tip, 1);
 }
 

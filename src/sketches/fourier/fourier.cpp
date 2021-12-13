@@ -68,7 +68,7 @@ public:
     {
         using namespace color;
 
-        canvas.clear_background(BLACK);
+        canvas.clear_background(rgba::BLACK);
 
         auto tip = epicycles.tip(origin, time);
         wave_ys.push_front(tip.y());

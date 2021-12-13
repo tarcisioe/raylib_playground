@@ -50,7 +50,7 @@ public:
     {
         using namespace color;
 
-        canvas.clear_background(BLACK);
+        canvas.clear_background(rgba::BLACK);
 
         auto x_origin = origin - Vec2{-100, 300};
         auto y_origin = origin - Vec2{300, -100};

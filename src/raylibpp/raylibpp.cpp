@@ -32,7 +32,7 @@ public:
         }
     }
 
-    std::optional<color::ColorRGBA> stroke{color::WHITE};
+    std::optional<color::ColorRGBA> stroke{color::rgba::WHITE};
     std::optional<color::ColorRGBA> fill{};
 
     ::util::MoveMarker moved;

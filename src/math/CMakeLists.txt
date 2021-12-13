@@ -4,10 +4,14 @@ target_sources(
     math
         PUBLIC
             geom/bezier.hpp
+            geom/matrix.hpp
             geom/vec2.hpp
+            geom/vec3.hpp
         PRIVATE
             geom/bezier.cpp
+            geom/matrix.cpp
             geom/vec2.cpp
+            geom/vec3.cpp
 )
 
 target_include_directories(

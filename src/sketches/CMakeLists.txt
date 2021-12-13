@@ -14,3 +14,4 @@ target_link_libraries(
 )
 
 add_subdirectory(fourier)
+add_subdirectory(raytracer)
