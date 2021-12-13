@@ -50,9 +50,14 @@ namespace math::geom {
             return *this;
         }
 
+        constexpr double length_squared() const
+        {
+            return x_*x_ + y_*y_ + z_*z_;
+        }
+
         constexpr double length() const
         {
-            return std::sqrt(x_*x_ + y_*y_ + z_*z_);
+            return std::sqrt(length_squared());
         }
 
         constexpr bool operator==(Vec3 const& other) const = default;

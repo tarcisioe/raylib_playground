@@ -1,4 +1,6 @@
+#include <cmath>
 #include <iostream>
+
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
@@ -96,14 +98,19 @@ private:
 };
 
 
-bool hit_sphere(math::geom::Vec3 const& center, double radius, Ray const& ray)
+double hit_sphere(math::geom::Vec3 const& center, double radius, Ray const& ray)
 {
     auto const oc = ray.origin() - center;
-    auto const a = dot(ray.direction(), ray.direction());
-    auto const b = 2.0 * dot(oc, ray.direction());
-    auto const c = dot(oc, oc) - radius * radius;
-    auto const discriminant = b*b - 4*a*c;
-    return discriminant > 0;
+    auto const a = ray.direction().length_squared();
+    auto const half_b = dot(oc, ray.direction());
+    auto const c = oc.length_squared() - radius * radius;
+    auto const discriminant = half_b * half_b - a*c;
+
+    if (discriminant < 0) {
+        return -1.0;
+    }
+
+    return (-half_b - std::sqrt(discriminant)) / a;
 }
 
 
@@ -111,8 +118,14 @@ color::ColorRGBDouble ray_color(Ray const& ray)
 {
     using math::geom::Vec3;
 
-    if (hit_sphere(Vec3{0, 0, -1}, 0.5, ray)) {
-        return {1, 0, 0};
+    {
+        auto const t = hit_sphere(Vec3{0, 0, -1}, 0.5, ray);
+
+        if (t > 0.0) {
+            auto const n = unit(ray.at(t) - Vec3{0, 0, -1});
+            auto vec_color = 0.5 * (n + Vec3{1, 1, 1});
+            return {vec_color.x(), vec_color.y(), vec_color.z()};
+        }
     }
 
     auto const unit_direction = unit(ray.direction());
